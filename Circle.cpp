@@ -11,62 +11,8 @@ Circle::Circle(): r(0), x(0), y(0) {}
 // Инициализируем приватные члены данных теми, которые вводим сами
 Circle::Circle(double r, double x, double y): r(r), x(x), y(y) {}
 
-// Копируем из другого круга данные
-Circle::Circle(const Circle &other_circle) {
-    r = other_circle.r;
-    x = other_circle.x;
-    y = other_circle.y;
-}
-
-// То же самое, что и конструктор, только ещё появляется return
-Circle& Circle::operator=(const Circle &other_circle) {
-    // Проверка на одинаковость объектов
-    if (this == &other_circle) {
-        return *this;
-    }
-    r = other_circle.r;
-    x = other_circle.x;
-    y = other_circle.y;
-    return *this;
-}
-
-
-
-
-
-// То же самое, что и конструктор копирования, только другой объект мы
-// ещё и зануляем (удаляем)
-Circle::Circle(Circle &&other_circle) noexcept {
-    r = other_circle.r;
-    other_circle.r = 0;
-    x = other_circle.x;
-    other_circle.x = 0;
-    y = other_circle.y;
-    other_circle.y = 0;
-}
-
-// То же самое, что сверху, только опять появляется return
-Circle& Circle::operator=(Circle &&other_circle) noexcept {
-    // Проверка на одинаковость объектов
-    if (this == &other_circle) {
-        return *this;
-    }
-    r = other_circle.r;
-    other_circle.r = 0;
-    x = other_circle.x;
-    other_circle.x = 0;
-    y = other_circle.y;
-    other_circle.y = 0;
-    return *this;
-}
-
-
-
-
-
-
 // Основной комментарий в h-файле. Кстати, эту функцию тоже можно сделать константной
-bool Circle::IsInCircle(double x, double y) {
+bool Circle::IsInCircle(double x, double y) const {
     return (x - this->x) * (x - this->x) + (y - this->y) * (y - this->y) <= r * r;
 }
 
@@ -77,6 +23,10 @@ bool Circle::operator<(const Circle &other_circle) const {
 
 bool Circle::operator>(const Circle &other_circle) const {
     return PI * r * r > PI * other_circle.r * other_circle.r;
+}
+
+bool Circle::operator==(const Circle &other_circle) const {
+    return (PI * r * r) == (PI * other_circle.r * other_circle.r);
 }
 
 // Добавляем к кругу радиус
@@ -116,8 +66,8 @@ int main() {
     std::cout << circle1.IsInCircle(5, 10) << std::endl;
     // Увеличиваем радиус круга на 6 (не получится использовать +=, так как
     // его надо перегружать отдельно)
-    circle1 = circle1 + 6;
-    // Снова выводим круг в потом вывода
+    circle1 + 6;
+    // Снова выводим круг в поток вывода
     std::cout << circle1 << std::endl;
     // Создаём второй круг с помощью конструктора по умолчанию
     Circle circle2;
